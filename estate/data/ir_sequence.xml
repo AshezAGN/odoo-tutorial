@@ -1,0 +1,12 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence Definition -->
+        <record id="seq_die_cutter_code" model="ir.sequence">
+            <field name="name">Die Cutter sequence</field>
+            <field name="code">diecutter.seq</field>
+            <field name="prefix">LP-D%(y)s</field> <!-- prefix -->
+            <field name="padding">4</field>  <!-- number of digits -->
+            <field name="number_next">1</field> <!-- increment value -->
+        </record>
+    </data>
+</odoo>

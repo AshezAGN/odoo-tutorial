@@ -50,20 +50,43 @@ class DieMaster(models.Model):
         string="Cylinder Repeat (mm)"
         computed="_compute_cylinder_repeat"
     )
-    around_ups = fields.Integer()
-    around_gaps = fields.Float()
-    total_ups = fields.Integer()
-    magnetic_cylinder = fields.Integer()
-    die_option = fields.Many2One()
-    face_stock = fields.Many2One()
-    liner = fields.Many2One()
-    # die_status = fields.Selection()
+    around_ups = fields.Integer(
+        string="Around Ups",
+        # computed=""
+    )
+    around_gaps = fields.Float(
+        string="Around Gaps (mm)",
+        # computed=""
+    )
+    # total_ups = fields.Integer()
+    magnetic_cylinder = fields.Integer(
+        string="Magnetic Cylinder (T)",
+        # computed=""
+    )
+    die_option = fields.Many2One(
+        string="Die Option",
+        required=True,
+        comodel_name="die_options",
+        relation="die_options.name"
+    )
+    face_stock = fields.Many2One(
+        string="Face Stock",
+        required=True,
+        comodel_name="face_stocks",
+        relation="face_stocks.name"
+    )
+    liner = fields.Many2One(
+        string="Liner",
+        required=True,
+        comodel_name="liners",
+        relation="liners.name"
+    )
 
     @api.model
     def create(self, vals):
         # When record is created, update id to the next sequence.
-        if vals.get('name', 'New') == 'New':
-            vals['name'] = self.env['ir.sequence'].next_by_code('diecutter.seq') or 'New'
+        if vals.get('die_code', 'New') == 'New':
+            vals['die_code'] = self.env['ir.sequence'].next_by_code('diecutter.seq') or 'New'
         return super(DieCutter, self).create(vals)
 
     # Updates each time repeat_length changes
@@ -105,6 +128,7 @@ class DieMaster(models.Model):
 class CylinderTeeth(models.Model):
     _name = 'cylinder.teeth'
     _description = 'Cylinder Teeth Master'
+
 
     cylinder_teeth = fields.Integer(required=True)
     cylinder_repeat = fields.Integer("Cyliner Repeat (mm)", required=True)

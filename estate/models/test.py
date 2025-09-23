@@ -18,6 +18,29 @@ class TestModel(models.Model):
             return NotImplemented
         return Domain('partner_id.ref', operator, value)
 
+    # Simple
+    field_1 = fields.Boolean()
+    field_2 = fields.Char()
+    field_3 = fields.Text()
+    field_4 = fields.Selection()
+    field_5 = fields.Float()
+    field_6 = fields.Integer()
+    field_7 = fields.Date()
+    field_8 = fields.Datetime()
+    field_9 = fields.Binary()
+    field_10 = fields.HTML()
+    # Relational
+    field_11 = fields.Many2One()
+    field_12 = fields.One2Many()
+    field_13 = fields.Many2Many()
+
+
+    # string: Field Name
+    # invisible: Whether to show/hide in view
+    # readonly: Whether field is editable or not
+    # required: Whether field must have a value or not
+    # default: Initialized value of field
+
     field1 = fields.Char()
     field2 = fields.Integer(
         string = "", # Label of field, default = Capitalized version of name

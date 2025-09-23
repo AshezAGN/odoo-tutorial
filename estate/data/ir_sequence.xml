@@ -8,5 +8,13 @@
             <field name="padding">4</field>  <!-- number of digits -->
             <field name="number_next">1</field> <!-- increment value -->
         </record>
+
+        <record id="seq_artwork_code" model="ir.sequence">
+            <field name="name">Artwork code sequence</field>
+            <field name="code">artwork_code.seq</field>
+            <field name="prefix">LP</field> <!-- prefix -->
+            <field name="padding">4</field>  <!-- number of digits -->
+            <field name="number_next">1</field> <!-- increment value -->
+        </record>
     </data>
 </odoo>

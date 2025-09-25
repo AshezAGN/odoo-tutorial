@@ -11,6 +11,9 @@ class ProductMaster(models.Model):
     artwork_id=fields.Char(
         related="artwork_master.art_id"
     )
+    new_artwork=fields.Boolean() # When new/updated artwork, becomes true, later on SO approval, becomes false.
     extra_quantity_allowed=fields.Integer()
     rolls=fields.Integer()
     carton_size=fields.Char()
+
+

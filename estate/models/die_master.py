@@ -89,6 +89,12 @@ class DieMaster(models.Model):
             vals['die_code'] = self.env['ir.sequence'].next_by_code('diecutter.seq') or 'New'
         return super(DieCutter, self).create(vals)
 
+    def calculate_all_around_gaps(teeths):
+        for teeth in all_teeth:
+            teeth.around_ups = math.floor(teeth.cylinder_teeth / (record.repeat_length * 2.5))
+            teeth.around_gaps = (cylinder_repeat / teeth.around_ups) + record.repeat_length
+        return sorted(all_teeth, key=lambda t: t.around_gaps)
+
     # Updates each time repeat_length changes
     @api.onchange("repeat_length")
     def _onchange_get_recommended_teeth(self):
@@ -101,10 +107,7 @@ class DieMaster(models.Model):
             else:
                 all_teeth = self.env['cylinder.teeth'].search([])
                 # Calculate around ups and around gaps.
-                for teeth in all_teeth:
-                    teeth.around_ups = math.floor(teeth.cylinder_teeth / (record.repeat_length * 2.5))
-                    teeth.around_gaps = (cylinder_repeat / teeth.around_ups) + record.repeat_length
-                sorted_teeths = sorted(all_teeth, key=lambda t: t.around_gaps)
+                sorted_teeths = calculate_all_around_gaps(all_teeth)
                 # Get 6 unique smallest values.
                 seen = set()
                 unique_teeths = []
@@ -123,6 +126,22 @@ class DieMaster(models.Model):
         for record in self:
             if record.cylinder_teeth:
                 record.cylinder_repeat = 3.125 * record.cylinder_teeth
+                record.around_ups = math.floor(record.cylinder_repeat / (record.repeat_length * 2.5))
+                record.around_gaps = (record.cylinder_repeat / record.around_ups) + record.repeat_length
+                record.total_ups = record.around_ups * record.around_gaps
+                # Calculate cylinder teeths above 72 having same around gap value as this.
+                if record.cylinder_teeth in [64,67,72]:
+                    sorted_teeths = calculate_all_around_gaps(all_teeth)
+                    for teeth in sorted_teeth:
+                        if teeth.cylinder_repeat not in [64,67,72] and teeth.around_gaps == record.around_gaps:
+                            record.magnetic_cylinder = teeth.cylinder_repeat
+                            break
+                    else:
+                        magnetic_cylinder = 0  
+                # Same as cylinder teeth when below 73  
+                else:
+                    record.magnetic_cylinder = record.cylinder_teeth
+
 
 
 class CylinderTeeth(models.Model):

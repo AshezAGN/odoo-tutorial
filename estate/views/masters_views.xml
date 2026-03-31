@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem id="masters_root_menu" name="Data Masters">
+        <menuitem id="artwork_data" action="_action_open_artwork_list" />
+        <menuitem id="die_master" action="_action_open_die_master" />
+        <menuitem id="configuration" action="_action_open_config_list" />
+    </menuitem>
+</odoo>
